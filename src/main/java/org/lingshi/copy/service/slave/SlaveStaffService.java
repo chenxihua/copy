@@ -1,4 +1,4 @@
-package org.lingshi.copy.service;
+package org.lingshi.copy.service.slave;
 
 import org.lingshi.copy.bean.Staff;
 import org.lingshi.copy.constant.CommonContant;
@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -15,20 +16,31 @@ import java.util.List;
  * @ClassName: StaffService
  * @Create By: chenxihua
  * @Author: Administrator
- * @Date: 2019/12/18 10:50
+ * @Date: 2019/12/19 11:27
  **/
 @Service
-public class StaffService {
+public class SlaveStaffService {
 
-    private static final Logger logger = LoggerFactory.getLogger(StaffService.class);
+    private static final Logger logger = LoggerFactory.getLogger(SlaveStaffService.class);
 
     @Autowired
     StaffRepository staffRepository;
 
-    @TargetDataSource
-    public boolean add(Staff staff){
+
+    /**
+     * @Transactional(rollbackFor = Exception.class)
+     *   主要是因为开启了事务管理，所以可以直接用。 主从库一样
+     * @param staff
+     * @return
+     */
+    @Transactional(rollbackFor = Exception.class)
+    @TargetDataSource(value = CommonContant.SLAVE_DATASOURCE)
+    public boolean addSlave(Staff staff){
         Staff save = staffRepository.save(staff);
-        logger.warn("save: {}", save);
+        logger.warn("{}", save);
+        if ("master".equals(save.getUsername())){
+            throw new RuntimeException("username 值不能是 [master]");
+        }
         if (save != null){
             return true;
         }

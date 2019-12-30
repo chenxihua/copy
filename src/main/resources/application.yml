@@ -36,4 +36,6 @@ spring:
         format_sql: true
         hbm2ddl:
           auto: update
+# 开启，可以看到自动配置的东西
+# debug: true
 

@@ -25,8 +25,7 @@ public class DynamicDataSourceConfig {
     private static final Logger logger = LoggerFactory.getLogger(DynamicDataSourceConfig.class);
 
 
-//    @Primary
-    @Bean
+    @Bean(value = "masterDataSource")
     @ConfigurationProperties("spring.datasource.master")
     public DataSource masterDataSource(){
         logger.warn("注入主 1： master");
@@ -34,7 +33,7 @@ public class DynamicDataSourceConfig {
     }
 
 
-    @Bean
+    @Bean(value = "slaveDataSource")
     @ConfigurationProperties("spring.datasource.slave")
     public DataSource slaveDataSource(){
         logger.warn("注入次 2： slave");
@@ -45,7 +44,6 @@ public class DynamicDataSourceConfig {
     @Bean(name = "dataSource")
     public DataSource dataSource(DataSource masterDataSource, DataSource slaveDataSource) {
 
-        logger.warn("注入 不知道： druid");
         DynamicDataSource druidDataSource = new DynamicDataSource();
         Map<Object, Object> targetDataSource = new HashMap<>(2);
         targetDataSource.put(CommonContant.MASTER_DATASOURCE, masterDataSource);

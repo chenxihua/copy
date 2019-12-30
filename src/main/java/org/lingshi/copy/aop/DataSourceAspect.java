@@ -37,7 +37,6 @@ public class DataSourceAspect implements Ordered {
         Method method = signature.getMethod();
         TargetDataSource annotation = method.getAnnotation(TargetDataSource.class);
         // 通过判断 @TargetDataSource 里面的值，来设置数据源
-        logger.warn("数据源： {}", annotation.value());
         DataSourceContextHolder.setDataSource(annotation.value());
         try {
             return point.proceed();
