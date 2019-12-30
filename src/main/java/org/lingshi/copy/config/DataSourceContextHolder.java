@@ -25,7 +25,6 @@ public class DataSourceContextHolder {
     }
 
     public static String getDataSource(){
-        logger.warn("线程： {}", contextHolder.get());
         return contextHolder.get();
     }
 

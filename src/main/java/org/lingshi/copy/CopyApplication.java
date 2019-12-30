@@ -23,6 +23,11 @@ public class CopyApplication {
 
     private static final Logger logger = LoggerFactory.getLogger(CopyApplication.class);
 
+    /**
+     * 这个方法，看看网上对 @EnableTransactionManagement 这个注释的解析
+     * @param platformTransactionManager
+     * @return
+     */
     @Bean
     public Object testBean(PlatformTransactionManager platformTransactionManager){
         // =====>>>>>> : org.springframework.orm.jpa.JpaTransactionManager
